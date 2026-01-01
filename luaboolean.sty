@@ -1,0 +1,46 @@
+\NeedsTeXFormat{LaTeX2e}[2024/11/01]
+\ProvidesPackage{luaboolean}[2025/10/07 v0.1.0 LuaLaTeX utilities for xparse booleans]
+
+\RequirePackage{xparse}
+\RequirePackage{iftex}
+\RequireLuaTeX
+
+% Load the Lua module that provides the core functionality
+\directlua{luaboolean = require('luaboolean.lua')}
+
+\ExplSyntaxOn
+% Convert Lua boolean to LaTeX boolean commands
+% Usage: \LuaBool{lua_expression} -> expands to \BooleanTrue or \BooleanFalse
+\NewDocumentCommand\LuaBool{m}{\directlua{tex.sprint(luaboolean.CastLuaBoolToLaTeX(#1))}}
+
+% Conditional testing based on Lua boolean expressions
+% Usage: \IfLuaBooleanTF{lua_expression}{true code}{false code}
+\NewDocumentCommand\IfLuaBooleanTF{mmm}{
+  \exp_args:Nf\IfBooleanTF{\LuaBool{#1}}{#2}{#3}
+}
+% One-armed versions for convenience
+\NewDocumentCommand\IfLuaBooleanF{mm}{\IfLuaBooleanTF{#1}{}{#2}}
+\NewDocumentCommand\IfLuaBooleanT{mm}{\IfLuaBooleanTF{#1}{#2}{}}
+
+%%% String equality testing
+% Usage: \IfLuaStrEqualTF{str1}{str2}{true code}{false code}
+\NewDocumentCommand\IfLuaStrEqualTF{mmmm}{
+  \exp_args:Nf\IfBooleanTF{\LuaBool{#1==#2}}{#3}{#4}
+}
+% One-armed versions for convenience
+\NewDocumentCommand\IfLuaStrEqualT{mmm}{\IfLuaStrEqualTF{#1}{#2}{#3}{}}
+\NewDocumentCommand\IfLuaStrEqualF{mmm}{\IfLuaStrEqualTF{#1}{#2}{}{#3}}
+
+%%% Expanded boolean testing for LaTeX flags
+% These expand their first argument before testing
+\NewDocumentCommand\IfBoolFlagT{mm}{
+  \exp_args:Nf\IfBooleanT{#1}{#2}
+}
+\NewDocumentCommand\IfBoolFlagF{mm}{
+  \exp_args:Nf\IfBooleanF{#1}{#2}
+}
+\NewDocumentCommand\IfBoolFlagTF{mmm}{
+  \exp_args:Nf\IfBooleanTF{#1}{#2}{#3}
+}
+\ExplSyntaxOff
+
