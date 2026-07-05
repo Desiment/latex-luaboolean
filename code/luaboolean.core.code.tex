@@ -1,0 +1,28 @@
+% code/luaboolean.core.code.tex - Lua boolean predicates
+\ExplSyntaxOn
+
+\NewDocumentCommand\LuaBool{m}{\directlua{tex.sprint(require('code.luaboolean.code').cast(#1))}}
+
+\NewDocumentCommand\IfLuaBooleanTF{mmm}{
+  \exp_args:Nf\IfBooleanTF{\LuaBool{#1}}{#2}{#3}
+}
+\NewDocumentCommand\IfLuaBooleanF{mm}{\IfLuaBooleanTF{#1}{}{#2}}
+\NewDocumentCommand\IfLuaBooleanT{mm}{\IfLuaBooleanTF{#1}{#2}{}}
+
+\NewDocumentCommand\IfLuaStrEqualTF{mmmm}{
+  \exp_args:Nf\IfBooleanTF{\LuaBool{#1==#2}}{#3}{#4}
+}
+\NewDocumentCommand\IfLuaStrEqualT{mmm}{\IfLuaStrEqualTF{#1}{#2}{#3}{}}
+\NewDocumentCommand\IfLuaStrEqualF{mmm}{\IfLuaStrEqualTF{#1}{#2}{}{#3}}
+
+\NewDocumentCommand\IfBoolFlagT{mm}{
+  \exp_args:Nf\IfBooleanT{#1}{#2}
+}
+\NewDocumentCommand\IfBoolFlagF{mm}{
+  \exp_args:Nf\IfBooleanF{#1}{#2}
+}
+\NewDocumentCommand\IfBoolFlagTF{mmm}{
+  \exp_args:Nf\IfBooleanTF{#1}{#2}{#3}
+}
+
+\ExplSyntaxOff
