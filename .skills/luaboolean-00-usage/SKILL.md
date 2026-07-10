@@ -1,3 +1,13 @@
+---
+name: luaboolean-00-usage
+description: Use luaboolean in LuaLaTeX documents to create TeX booleans from Lua boolean values.
+license: MIT
+compatibility: opencode
+metadata:
+  package: luaboolean
+  topic: usage
+---
+
 # luaboolean: Usage
 
 ## When To Use
